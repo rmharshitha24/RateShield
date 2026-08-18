@@ -1,0 +1,21 @@
+syntax = "proto3";
+package ratelimiter.v1;
+
+service RateLimiter { rpc Check(RateLimitRequest) returns (RateLimitResponse); }
+
+message RateLimitRequest {
+  string key = 1;
+  uint32 limit = 2;       // permits per window
+  uint32 window_ms = 3;
+  uint32 cost = 4;
+}
+message RateLimitResponse {
+  bool allowed = 1;
+  uint32 status_code = 2; // 200 or 429: transport-neutral HTTP equivalent
+  uint32 limit = 3;
+  uint32 remaining = 4;
+  uint64 reset_unix_ms = 5;
+  string rate_limit_limit = 6;
+  string rate_limit_remaining = 7;
+  string rate_limit_reset = 8;
+}
